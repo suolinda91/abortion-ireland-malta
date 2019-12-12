@@ -1,0 +1,105 @@
+*Dummyvariable Land fuer Irland (1372) und Malta (1470)
+generate LAND = .
+replace LAND = 0 if t102 == 1372
+replace LAND = 1 if t102 == 1470
+label define LandLabel 0 "Irland" 1 "Malta"
+label value LAND LandLabel
+
+
+*Variable zum Schwangerschaftsabbruch
+*Ordinalskala
+generate Schwangerschftsabbruch = q60
+label value Schwangerschftsabbruch LABO
+mvdecode Schwangerschftsabbruch, mv(7,8)
+
+bysort LAND: tabulate Schwangerschftsabbruch
+bysort LAND: tabstat Schwangerschftsabbruch, stat (n range iqr q)
+graph hbox Schwangerschftsabbruch, over(LAND) ylabel(1 "Stimme voll und ganz zu" 2 "" 3 "Stimme weder zu noch nicht zu" 4 "" 5 "Stimme überhaupt nicht zu")
+
+histogram Schwangerschftsabbruch if LAND == 0, percent title("Einstellung zum Schwangerschaftsabbruch - Irland") xlabel(1 "Stimme voll und ganz zu" 2 "" 3 "Stimme weder zu noch nicht zu" 4 "" 5 "Stimme überhaupt nicht zu")
+histogram Schwangerschftsabbruch if LAND == 1, percent title("Einstellung zum Schwangerschaftsabbruch - Malta") xlabel(1 "Stimme voll und ganz zu" 2 "" 3 "Stimme weder zu noch nicht zu" 4 "" 5 "Stimme überhaupt nicht zu")
+
+
+*Variable Geschlecht
+*Nominalskaliert
+generate Geschlecht = q102
+label value Geschlecht q102
+
+bysort LAND: tabulate Geschlecht
+bysort LAND: tabstat Geschlecht, stat (n)
+histogram Geschlecht, by(LAND) percent title("Geschlecht") xlabel(1 "Männlich" 2 "Weiblich")
+
+*Variable zur politischen Verortung
+*I Skala
+generate LRSkala = q46
+label value LRSkala q46
+mvdecode LRSkala, mv(77,88)
+
+bysort LAND: tabulate LRSkala
+bysort LAND: tabstat LRSkala, statistics (n range mean sd cv iqr q)
+graph hbox LRSkala, over(LAND) ylabel(0 "Links" 2 "" 3 "" 4 "" 5 "" 6 "" 7 "" 8 "" 9 "" 10 "Rechts")
+bysort LAND: ci LRSkala
+
+histogram LRSkala if LAND == 0, percent title("Politische Selbsteinschätzung - Irland") xlabel(0 "Links" 2 "" 3 "" 4 "" 5 "" 6 "" 7 "" 8 "" 9 "" 10 "Rechts")
+histogram LRSkala if LAND == 1, percent title("Politische Selbsteinschätzung - Malta") xlabel(0 "Links" 2 "" 3 "" 4 "" 5 "" 6 "" 7 "" 8 "" 9 "" 10 "Rechts")
+
+
+*Variable zur Religiösität
+*I Skala
+generate Religion = q119
+label value Religion q119
+mvdecode Religion, mv(77,88)
+
+bysort LAND: tabulate Religion
+bysort LAND: tabstat Religion, statistics (n range mean sd cv iqr q)
+graph hbox Religion, over(LAND) ylabel(0 "überbaupt nicht religiös" 2 "" 3 "" 4 "" 5 "" 6 "" 7 "" 8 "" 9 "" 10 "sehr religiös")
+bysort LAND: ci Religion
+
+*histogram Religion, by(LAND) percent xlabel(0 "überhaupt nicht religiös" 1 "" 2 "" 3 "" 4 "" 5 "" 6 "" 7 "" 8 "" 9 "" 10 "sehr religiös")
+histogram Religion if LAND == 0, percent title("Religiosität - Irland") xlabel(0 "überhaupt nicht religiös" 1 "" 2 "" 3 "" 4 "" 5 "" 6 "" 7 "" 8 "" 9 "" 10 "sehr religiös")
+histogram Religion if LAND == 1, percent title("Religiosität - Malta") xlabel(0 "überhaupt nicht religiös" 1 "" 2 "" 3 "" 4 "" 5 "" 6 "" 7 "" 8 "" 9 "" 10 "sehr religiös")
+
+
+*Variable zum Frauenbild
+generate Frauenbild = q66
+label value Frauenbild LABO
+mvdecode Frauenbild, mv(7,8)
+
+bysort LAND: tabulate Frauenbild
+bysort LAND: tabstat Frauenbild, stat (n range iqr q)
+graph hbox Frauenbild, over(LAND) ylabel(1 "Stimme voll und ganz zu" 2 "" 3 "Stimme weder zu noch nicht zu" 4 "" 5 "Stimme überhaupt nicht zu")
+
+histogram Frauenbild if LAND == 0, percent title("Vorstellung über die Erwerbstätigkeit von Frauen - Irland") xlabel(1 "Stimme voll und ganz zu" 2 "" 3 "Stimme weder zu noch nicht zu" 4 "" 5 "Stimme überhaupt nicht zu")
+histogram Frauenbild if LAND == 1, percent title("Vorstellung über die Erwerbstätigkeit von Frauen - Malta") xlabel(1 "Stimme voll und ganz zu" 2 "" 3 "Stimme weder zu noch nicht zu" 4 "" 5 "Stimme überhaupt nicht zu")
+
+
+*demographische Variable
+*Religionszugehörigkeit
+generate Religionsgemeinschaft = q117
+label value Religionsgemeinschaft q117
+mvdecode Religionsgemeinschaft, mv(77,88)
+
+bysort LAND: tabulate Religionsgemeinschaft
+bysort LAND: tabstat Religionsgemeinschaft, stat(n)
+
+histogram Religionsgemeinschaft if LAND == 0, percent title("Religionsgemeinschaft - Irland") xlabel(0 "" 1 "Röm.-Kath." 2 "Prot." 3 "Orthodox" 4 "Jüdisch" 5 "Muslim" 6 "Hindu" 7 "Buddhist" 8 "Sonstige")
+histogram Religionsgemeinschaft if LAND == 1, percent title("Religionsgemeinschaft - Malta") xlabel(0 "" 1 "Röm.-Kath." 2 "Prot." 3 "Orthodox" 4 "Jüdisch" 5 "Muslim" 6 "Hindu" 7 "Buddhist" 8 "Sonstige")
+
+
+
+
+*1.Hypothese: Schwangerschaftsabbruch - Geschlecht
+bysort LAND: tabulate Schwangerschftsabbruch Geschlecht, row column
+bysort LAND: tabulate Schwangerschftsabbruch Geschlecht, chi2
+
+*2.Hypothese: Schwangerschaftsabbruch - Erwerbstätigkeit von Frauen
+bysort LAND: tabulate Schwangerschftsabbruch Frauenbild, row column
+bysort LAND: spearman Schwangerschftsabbruch Frauenbild
+
+
+*3.Hypothese: Schwangerschaftsabbruch - politische Selbstverortung
+bysort LAND: spearman Schwangerschftsabbruch LRSkala
+
+
+*4.Hypothese: Schwangerschaftsabbruch - Religiösität
+bysort LAND: spearman Schwangerschftsabbruch Religion
