@@ -14,7 +14,7 @@ df.loc[df['OpinionAbortion']>5, 'OpinionAbortion'] = None
 df.loc[df['FemaleEmployment']>5, 'FemaleEmployment'] = None
 df.loc[df['gender']==7, 'gender'] = None
 
-ees2009_df = df[(df['country']== 1372) | (df['country']== 1470)]
+ees2009_df = df[(df['country']== 'Ireland') | (df['country']== 'Malta')]
 #ireland_df = df[df['country']== 1372]
 #malta_df = df[df['country']== 1470]
 
@@ -28,13 +28,9 @@ univariat_malta = ees2009_df[ees2009_df['country']== 'Malta'].describe()
 
 # Boxplot Political Position
 sns.set(style="whitegrid")
-sns.boxplot(x='PoliticalPosition', y='country', data=ees2009_df, palette='pastel')
-#plt.set(xlabel='Country', ylabel='Political Position on a Left-Right Scale', title='Political Positons')
-plt.xlabel('Self Positioning on a Left-Right Scale')
+PoliticalPosition_ax = sns.boxplot(x='PoliticalPosition', y='country', data=ees2009_df, palette='pastel')
+PoliticalPosition_ax.set(xlabel='Political Position on a Left-Right Scale', ylabel='Country', title='Self positioning on the political spectrum in Ireland and Malta')
 plt.xticks((0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10), ('Left', 1, 2, 3, 4, 5, 6, 7, 8, 9, 'Right'))
-plt.ylabel('Country')
-plt.title('Political Positions in Ireland and Malta')
-#plt.show()
 
 # Boxplot Opinion on Abortion
 sns.set(style="whitegrid")
@@ -74,13 +70,41 @@ plt.xticks((0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10), ('Not at all religious', 1, 2, 3,
 
 
 # Test 1st hypothesis
-ees2009_ireland = ees2009_df[ees2009_df['country'] == 'Ireland']
-ees2009_malta = ees2009_df[ees2009_df['country'] == 'Malta']
+corrtab_Ireland = pd.crosstab(ees2009_df[ees2009_df['country'] == 'Ireland']['OpinionAbortion'], ees2009_df[ees2009_df['country'] == 'Ireland']['gender'])
+chi2_1hypothesis_ireland, p_1hypothesis_ireland, dof_1hypothesis_ireland, ex_1hypothesis_ireland = stats.chi2_contingency(corrtab_Ireland)
+print('== Ireland ==')
+print('Chi-Stat: %s' % chi2_1hypothesis_ireland)
+print('p-Value: %s' % p_1hypothesis_ireland)
+print('Degree of Freedom: %s' % dof_1hypothesis_ireland)
+print('Contingency Table: %s' % ex_1hypothesis_ireland)
+print('\n')
 
-corrtab_Ireland = pd.crosstab(ees2009_ireland['gender'], ees2009_ireland['OpinionAbortion'])
-chi2_ireland, p_ireland, dof_ireland, ex_ireland = stats.chi2_contingency(corrtab_Ireland)
 
-corrtab_Malta = pd.crosstab(ees2009_malta['gender'], ees2009_malta['OpinionAbortion'])
-chi2_malta, p_malta, dof_malta, ex_malta = stats.chi2_contingency(corrtab_Malta)
+corrtab_Malta = pd.crosstab(ees2009_df[ees2009_df['country'] == 'Malta']['OpinionAbortion'], ees2009_df[ees2009_df['country'] == 'Malta']['gender'])
+chi2_1hypothesis_malta, p_1hypothesis_malta, dof_1hypothesis_malta, ex_1hypothesis_malta = stats.chi2_contingency(corrtab_Malta)
+
+print('== Malta ==')
+print('Chi-Stat: %s' % chi2_1hypothesis_malta)
+print('p-Value: %s' % p_1hypothesis_malta)
+print('Degree of Freedom: %s' % dof_1hypothesis_malta)
+print('Contingency Table: %s' % ex_1hypothesis_malta)
 
 # Test 2nd hypothesis
+hypothesis2_ireland = ees2009_df[ees2009_df['country'] == 'Ireland'][['OpinionAbortion', 'FemaleEmployment']].dropna()
+hypothesis2_malta = ees2009_df[ees2009_df['country'] == 'Malta'][['OpinionAbortion', 'FemaleEmployment']].dropna()
+
+rho_2hypothesis_ireland, p_2hypothesis_ireland = stats.spearmanr(hypothesis2_ireland['OpinionAbortion'],hypothesis2_ireland['FemaleEmployment'])
+rho_2hypothesis_malta, p_2hypothesis_malta = stats.spearmanr(hypothesis2_malta['OpinionAbortion'],hypothesis2_malta['FemaleEmployment'])
+#print(ees2009_ireland['OpinionAbortion'].corr(ees2009_ireland['FemaleEmployment'], method='spearman'))
+
+# Test 3rd hypothesis
+hypothesis3_ireland = ees2009_df[ees2009_df['country'] == 'Ireland'][['OpinionAbortion', 'PoliticalPosition']].dropna()
+hypothesis3_malta = ees2009_df[ees2009_df['country'] == 'Malta'][['OpinionAbortion', 'PoliticalPosition']].dropna()
+rho_3hypothesis_ireland, p_3hypothesis_ireland = stats.spearmanr(hypothesis3_ireland['OpinionAbortion'],hypothesis3_ireland['PoliticalPosition'])
+rho_3hypothesis_malta, p_3hypothesis_malta = stats.spearmanr(hypothesis3_malta['OpinionAbortion'],hypothesis3_malta['PoliticalPosition'])
+
+#Test 4th hypothesis
+hypothesis4_ireland = ees2009_df[ees2009_df['country'] == 'Ireland'][['OpinionAbortion', 'LevelOfSpirituality']].dropna()
+hypothesis4_malta = ees2009_df[ees2009_df['country'] == 'Malta'][['OpinionAbortion', 'LevelOfSpirituality']].dropna()
+rho_4hypothesis_ireland, p_4hypothesis_ireland = stats.spearmanr(hypothesis4_ireland['OpinionAbortion'],hypothesis4_ireland['LevelOfSpirituality'])
+rho_4hypothesis_malta, p_4hypothesis_malta = stats.spearmanr(hypothesis4_malta['OpinionAbortion'],hypothesis4_malta['LevelOfSpirituality'])
