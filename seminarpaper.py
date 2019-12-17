@@ -61,7 +61,6 @@ ees2009_religion = ees2009_df.groupby('country')['religion'].value_counts(normal
 ees2009_religion['religionPercentage'] = ees2009_religion['religionPercentage'] * 100
 ReligionOfInterviewed = sns.catplot(x='religion', y ='religionPercentage', row='country',data=ees2009_religion, palette='pastel', kind='bar')
 (ReligionOfInterviewed.set_axis_labels('Religion', 'Percentage').set_xticklabels(['No denomination', 'R.Catholic', 'Protestant', 'Orthodox', 'Jew', 'Muslim', 'Hinud', 'Buddhist', 'Church of England'], rotation=45).set_titles('{row_name}').despine(top=True, right=True))
-#plt.show()
 
 # Level of Level Of Spirituality
 LevelOfSpirituality_ax = sns.boxplot(x='LevelOfSpirituality', y='country', data=ees2009_df, palette='pastel')
