@@ -71,22 +71,9 @@ plt.xticks((0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10), ('Not at all religious', 1, 2, 3,
 # Test 1st hypothesis
 corrtab_Ireland = pd.crosstab(ees2009_df[ees2009_df['country'] == 'Ireland']['OpinionAbortion'], ees2009_df[ees2009_df['country'] == 'Ireland']['gender'])
 chi2_1hypothesis_ireland, p_1hypothesis_ireland, dof_1hypothesis_ireland, ex_1hypothesis_ireland = stats.chi2_contingency(corrtab_Ireland)
-print('== Ireland ==')
-print('Chi-Stat: %s' % chi2_1hypothesis_ireland)
-print('p-Value: %s' % p_1hypothesis_ireland)
-print('Degree of Freedom: %s' % dof_1hypothesis_ireland)
-print('Contingency Table: %s' % ex_1hypothesis_ireland)
-print('\n')
-
 
 corrtab_Malta = pd.crosstab(ees2009_df[ees2009_df['country'] == 'Malta']['OpinionAbortion'], ees2009_df[ees2009_df['country'] == 'Malta']['gender'])
 chi2_1hypothesis_malta, p_1hypothesis_malta, dof_1hypothesis_malta, ex_1hypothesis_malta = stats.chi2_contingency(corrtab_Malta)
-
-print('== Malta ==')
-print('Chi-Stat: %s' % chi2_1hypothesis_malta)
-print('p-Value: %s' % p_1hypothesis_malta)
-print('Degree of Freedom: %s' % dof_1hypothesis_malta)
-print('Contingency Table: %s' % ex_1hypothesis_malta)
 
 # Test 2nd hypothesis
 hypothesis2_ireland = ees2009_df[ees2009_df['country'] == 'Ireland'][['OpinionAbortion', 'FemaleEmployment']].dropna()
@@ -105,5 +92,7 @@ rho_3hypothesis_malta, p_3hypothesis_malta = stats.spearmanr(hypothesis3_malta['
 #Test 4th hypothesis
 hypothesis4_ireland = ees2009_df[ees2009_df['country'] == 'Ireland'][['OpinionAbortion', 'LevelOfSpirituality']].dropna()
 hypothesis4_malta = ees2009_df[ees2009_df['country'] == 'Malta'][['OpinionAbortion', 'LevelOfSpirituality']].dropna()
-rho_4hypothesis_ireland, p_4hypothesis_ireland = stats.spearmanr(hypothesis4_ireland['OpinionAbortion'],hypothesis4_ireland['LevelOfSpirituality'])
+rho_4hypothesis_ireland, p_4hypothesis_ireland = stats.spearmanr(hypothesis4_ireland['LevelOfSpirituality'], hypothesis4_ireland['OpinionAbortion'])
 rho_4hypothesis_malta, p_4hypothesis_malta = stats.spearmanr(hypothesis4_malta['OpinionAbortion'],hypothesis4_malta['LevelOfSpirituality'])
+
+print(p_4hypothesis_ireland)
