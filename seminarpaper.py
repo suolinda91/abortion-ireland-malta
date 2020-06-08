@@ -15,12 +15,19 @@ df.loc[df['FemaleEmployment']>5, 'FemaleEmployment'] = None
 df.loc[df['gender']==7, 'gender'] = None
 
 ees2009_df = df[(df['country']== 'Ireland') | (df['country']== 'Malta')]
-#ireland_df = df[df['country']== 1372]
-#malta_df = df[df['country']== 1470]
 
 # missing values
 NaN_ireland_sum = ees2009_df[ees2009_df['country']== 'Ireland'].isnull().sum()
 NaN_malta_sum = ees2009_df[ees2009_df['country']== 'Malta'].isnull().sum()
+
+print('== Missing values in Ireland ==')
+print(NaN_ireland_sum)
+print('Total amount of rows: %s' % ees2009_df[ees2009_df['country']== 'Ireland'].shape[0])
+print('\n')
+print('== Missing values in Malta ==')
+print(NaN_malta_sum)
+print('Total amount of rows: %s' % ees2009_df[ees2009_df['country']== 'Malta'].shape[0])
+print('\n')
 
 ## Univariat analysis
 univariat_ireland = ees2009_df[ees2009_df['country']== 'Ireland'].describe()
@@ -96,3 +103,4 @@ rho_4hypothesis_ireland, p_4hypothesis_ireland = stats.spearmanr(hypothesis4_ire
 rho_4hypothesis_malta, p_4hypothesis_malta = stats.spearmanr(hypothesis4_malta['OpinionAbortion'],hypothesis4_malta['LevelOfSpirituality'])
 
 print(p_4hypothesis_ireland)
+print('Test')
